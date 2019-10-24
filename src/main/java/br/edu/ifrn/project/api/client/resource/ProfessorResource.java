@@ -1,6 +1,5 @@
 package br.edu.ifrn.project.api.client.resource;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -30,30 +29,24 @@ public class ProfessorResource {
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		
-		Map<String, Object> body = new HashMap<String, Object>();
-		body.put("nome",objectBody.getNome());
-		body.put("matricula",objectBody.getMatricula());
-		body.put("email",objectBody.getEmail());
-
-		HttpEntity<?> httpEntity = new HttpEntity<Object>(body,headers);
+		HttpEntity<?> httpEntity = new HttpEntity<Object>(objectBody,headers);
 		@SuppressWarnings("rawtypes")
 		ResponseEntity<Map> response = (objectBody.getId() == 0)?
         restTemplate.exchange(URL_API_PROFESSOR,HttpMethod.POST,httpEntity,Map.class):
-        restTemplate.exchange("https://projetoifhelp.herokuapp.com/api/professor/"+objectBody.getId(),HttpMethod.PUT,httpEntity,Map.class);
+        restTemplate.exchange(URL_API_PROFESSOR+"{id}/",HttpMethod.PUT,httpEntity,Map.class,objectBody.getId());
 	
 		return (response.getStatusCode() == HttpStatus.UNAUTHORIZED)?false:true;
 	}
 	
 	public boolean DELETEdelete(long id) {
-
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<?> httpEntity = new HttpEntity<Object>(headers);
-		ResponseEntity<String> response = restTemplate.exchange(URL_API_PROFESSOR+id, HttpMethod.DELETE,httpEntity,String.class);
+		@SuppressWarnings("rawtypes")
+		ResponseEntity<Map> response = restTemplate.exchange(URL_API_PROFESSOR+"{id}/",HttpMethod.DELETE,httpEntity,Map.class,id);
 		return (response.getStatusCode() == HttpStatus.UNAUTHORIZED)?false:true;
 	}
-		
+	
 	public List<ProfessorDTO> GETread() {	
 		try {
 			ResponseEntity<ProfessorDTO[]> response = this.restTemplate.getForEntity(URL_API_PROFESSOR,ProfessorDTO[].class);

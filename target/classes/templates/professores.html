@@ -33,6 +33,12 @@
 					<td th:text="${professor.matricula}"></td>
 					<td th:text="${professor.email}"></td>
 					<th>
+					   <a th:href="@{/professor/adicionar}">
+                         <button type="button" rel="tooltip" class="btn btn-success">
+                              create
+                         </button>
+                       </a>
+                       
 					   <a th:href="@{/professor/update/{id}(id=${professor.id})}">
                          <button type="button" rel="tooltip" class="btn btn-primary">
                               update

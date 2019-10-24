@@ -44,7 +44,7 @@ public class ProfessorController {
 	public String delete(@PathVariable("id") long id,RedirectAttributes atribute){
 		if(resource.DELETEdelete(id)){
 			atribute.addFlashAttribute("mensagem","- Professor deletado com sucesso!");
-			System.out.print("deu certo");
+			System.out.print("deu certo"+id);
 			return "redirect:/professor/lista";
 		}else{
 			System.out.print("Não está dando certo");
@@ -56,14 +56,14 @@ public class ProfessorController {
 	@GetMapping("/update/{id}")
 	public ModelAndView update(@PathVariable("id") long id,RedirectAttributes atribute){
 		List<ProfessorDTO>  listProfessor = resource.GETread();
+		ProfessorDTO finByProfessor = null;
 		
 		for(ProfessorDTO professor : listProfessor){
-			if(id == professor.getId()){
-				return new ModelAndView("formprofessor").addObject("professor",professor);
+			if(professor.getId() == id){
+				finByProfessor = professor;
 			}
 		}
-		
-		return new ModelAndView("formprofessor").addObject("professor",null);
+		return new ModelAndView("formprofessor").addObject("professor",finByProfessor);
 	}
 	
 	@GetMapping("/lista")
